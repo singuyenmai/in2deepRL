@@ -57,9 +57,9 @@ Greedy is not very great, it can get stuck on a suboptimal action forever. This 
 
 $\epsilon$ = prob. of selecting a random action. 
 
-Greedy action is selected with a probability of $(1-\epsilon)$, also assuming no ties. 
+Greedy action is selected with a probability of $(1-\epsilon)$, also assuming no ties. => There is some exploration here, with a fixed prob. of $\epsilon$. So new knowledge can come in.
 
-$\epsilon$ is constant, therefore, the algorithm keeps exploring all the times => still, linear expected total regret
+However, because $\epsilon$ is constant, the algorithm keeps exploring all the times, even if the optimal policy has already been found => still, linear expected total regret
 
 ### Policy gradients
 
@@ -97,7 +97,12 @@ A good algorithm ensures **smalll counts of actions with large regrets** (note t
 
 ### Optimism in the face of uncertainty
 
-####  UCB (Upper confidence bounds)
+An action is more probable to be selected when either:
+
+- the estimated action value is high, or
+- the uncertainty (variance of the action value distribution) is high (the more uncertainty a value is, the more important to explore that action)
+
+### UCB (Upper confidence bounds)
 
 For each action value, estimate the upper bound $U_t(a)$ such that it is highly probable that $q(a) \le Q_t(a) + U_t(a)$. We also need to estimate this upper bound to be small enough to converge to the true mean action value $q(a)$. The idea is that the more number of times an action were selected ($N_t(a)$) then the smaller its UCB become. But still, can we derive the optimal bound?
 
@@ -118,5 +123,49 @@ $c$ could be $1/\sqrt{2}$ and is a hyper parameter. Higher $c$ = explore more. $
 
 **Auer theorem: UCB with $c=\sqrt{2}$  achieves logarithmic expected total regret**
 
-#### Thompson sampling
+### Bayesian approaches
+
+#### Bayesian bandits
+
+Bayesian approach works with model distributions over prob. values $p(q(a) | \theta_t)$. Note that $q(a)$ here is the expected value for a given action (in our problem, the agent does not know its action values, it has to learn to realize those)
+
+The prob. here is intepreted as our belief
+
+$\theta_t$ here are parameters of the belief distributions
+
+Allow us to incoorperate known prior knowledge: $\theta_{t=0}$
+
+Belief distributions are updated over time as the agent acts and receives rewards.
+
+#### Bayesian bandits with UCB
+
+We can estimate upper confidences from the posteriors. 
+
+For example, $U_t(a) = c\sigma_t(a)$ where $\sigma_t(a)$ is the standard deviation of the belief distribution $p_t(q(a))$ at time $t$. Then, the action selecting rule is picking one that maximises $Q_t(a) + c\sigma_t(a)$
+
+### Thompson sampling
+
+Use p**robablity matching**: the probability of selecting an action $a$ (policy) = the prob. (belief) that $a$ is optimal given the "up-to-date" knowledge
+
+But, prob. matching is optimistic in the face of uncertainty: actions can have higher prob. when either the estimated value is high, or the uncertainty is high
+
+Thompson 1933 - sample-based probability matching:
+
+- For an action $a$, sample $Q_t(a)$ from the belief distribution $p_t(q(a))$
+- Do that for all the actions
+- Select the action that maximizes the sampling: $A_t = argmax_a Q_t(a)$
+
+=> Thompson sampling provides a way to derive the policy from belief distributions
+
+For Bernoulli bandits (bandits with prior belief as Bernoulli distribution), Thompson sampling achieves logarithmic expected total regret, and therefore, is optimal.
+
+**Note for UCB & Thompson sampling**: For a same problem, the two methods can derive different sequences of actions taken, but eventually still converge to similar policies.
+
+### Planning to explore
+
+The internal information state of the agent $S_t$ can change over time. The transition in the agent state is a Markov process, where each action (taken) $A_t$ causes a transition to  new state $S_{t+1}$ with a prob. $p(S_{t+1} | A_t, S_t)$
+
+=> Via learning, bandits actions affect the future, though it is the future of the internal state of the agent, not that of the external environment.
+
+To estimate the information state space, RL can be used. For example, learn a Bayesian reward distribution (how likely of receiving a certain reward is), then plan into the future about the internal states.
 
