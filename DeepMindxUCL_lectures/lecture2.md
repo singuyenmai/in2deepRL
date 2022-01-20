@@ -8,7 +8,7 @@ Decisions affect the reward, the agent state, and the environment state. Therefo
 
 Assumptions during this lecture:
 
-- Environment only has a single state (i.e. no state at all) => actions no longer have consequences on the environment
+- Environment only has a single state (i.e. no state at all) => actions no longer have consequences on the environment (*nonassociative* setting)
 - actions still impact immediate reward
 
 ## Exploration vs. Exploitation
@@ -141,11 +141,11 @@ Belief distributions are updated over time as the agent acts and receives reward
 
 We can estimate upper confidences from the posteriors. 
 
-For example, $U_t(a) = c\sigma_t(a)$ where $\sigma_t(a)$ is the standard deviation of the belief distribution $p_t(q(a))$ at time $t$. Then, the action selecting rule is picking one that maximises $Q_t(a) + c\sigma_t(a)$
+For example, $U_t(a) = c\sigma_t(a)$ where $\sigma_t(a)$ is the standard deviation of the belief distribution $p_t(q(a))$ at time $t$ (our belief of the true standard deviation of the true value). Then, the action selecting rule is picking one that maximises $Q_t(a) + c\sigma_t(a)$
 
 ### Thompson sampling
 
-Use p**robablity matching**: the probability of selecting an action $a$ (policy) = the prob. (belief) that $a$ is optimal given the "up-to-date" knowledge
+Use **probablity matching**: the probability of selecting an action $a$ (policy) = the prob. (belief) that $a$ is optimal given the "up-to-date" knowledge
 
 But, prob. matching is optimistic in the face of uncertainty: actions can have higher prob. when either the estimated value is high, or the uncertainty is high
 
