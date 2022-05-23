@@ -10,7 +10,7 @@ There are also other methods to formalize RL beyong MDPs. Those are discussed in
 
 ## 3.1 The Agent-Environment Interface
 
-![image-20220120174837059](/home/singuyen/Study/SCB/DeepRL/BartoSutton_book/fig/image-20220120174837059.png)
+![image-20220120174837059](./fig/image-20220120174837059.png)
 
 The MDP and the agent together give rise to a trajectory: $S_0, A_0, R_1, S_1, A_1, R_2, S_2, A_3, R_3, S_3,...$
 
