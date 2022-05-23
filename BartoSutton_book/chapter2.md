@@ -112,7 +112,7 @@ $\pi_t(a)$ is the prob. of taking action $a$ at time $t$.
 
 Preferences are updated by stochastic gradient ascent. The prob. of taking an action in the future is increased, if the the current reward > the baseline reward, and vice versa. The non-selected actions move in the opposite direction. The baseline reward is updated by the general rule in section 2.4.
 
-The choice of the baseline does not a↵ect the expected update of the algorithm, but it does affect the variance of the update and thus the rate of convergence.
+The choice of the baseline does not affect the expected update of the algorithm, but it does affect the variance of the update and thus the rate of convergence.
 
 <u>*Exercise 2.9*</u>:  The soft-max distribution is the logistic sigmoid function in the case of 2 actions
 
